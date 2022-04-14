@@ -91,17 +91,16 @@ function tdwd_get_fitting_locations() {
     $postcode = $_POST['postcode'];
      global $wpdb,$table_prefix;
     $wp_emp = $table_prefix."postal_location";
-    $search_term = $_POST['search_term'];
 
 
     $addresses = array();
-    if(empty($search_term )){
+    if(empty($postcode)){
         $q="SELECT * from `$wp_emp`" ;
     }else{
          $q = "SELECT * FROM `$wp_emp` WHERE 
-        `postal_code` LIKE '%".$search_term."%'
-        OR `address` LIKE '%".$search_term."%'
-        OR `status` LIKE '%".$search_term."%';";
+        `postal_code` LIKE '%".$postcode."%'";
+        //OR `address` LIKE '%".$search_term."%'
+        //OR `status` LIKE '%".$search_term."%';";
     }
     $results = $wpdb->get_results($q);
     foreach($results as $row):
