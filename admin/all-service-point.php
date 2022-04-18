@@ -6,6 +6,18 @@ if(isset($_POST['	'])){
 }else{
     $q = "SELECT * FROM `$wp_emp`;";
 }
+
+
+if(isset($_POST["delete"]))
+{
+  $service_id = $_POST["service_id"];
+
+  global $wpdb,$table_prefix;
+  $wp_emp = $table_prefix."postal_location";
+   $wpdb->delete( $wp_emp, array( 'id' => $service_id ) );
+}
+
+
 $results = $wpdb->get_results($q);
 ob_start();
 ?>
@@ -43,7 +55,16 @@ ob_start();
 	     if(!empty($results)):
          foreach($results as $row):?>
 	         <tr>
-	            <th class="title column-title has-row-actions column-primary page-title" scope="row"><?php echo $row->id;?></th>
+	            <th class="title column-title has-row-actions column-primary page-title" scope="row"><?php echo $row->id;?>
+                     <div class="row-actions">
+                        <span class="edit">
+                            <form class="d-inline" method="POST" style="display:inline;">
+                                <input type="hidden" name="service_id" value="<?php echo $row->id;?>" />
+                                <input type="submit" class="button-link submitdelete" name="delete" value="Trash"> 
+                            </form>
+                        </span>
+                    </div>   
+                </th>
 	            <td class="column-columnname"><?php echo $row->postal_code; ?></td>
 	            <td class="column-columnname"><?php echo $row->address; ?> </td>
 	            <td class="column-columnname"><?php echo $row->description;?></td>

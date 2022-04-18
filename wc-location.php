@@ -16,7 +16,17 @@ if ( ! defined( 'ABSPATH' ) ){
     exit;
 }
 
-require_once( __DIR__ . '/inc/wc-custom.php');
+
+
+
+if ( 
+  in_array( 
+    'woocommerce/woocommerce.php', 
+    apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) 
+  ) 
+) {
+    require_once( __DIR__ . '/inc/wc-custom.php');
+}
 
 
 function my_plugin_activation(){
@@ -39,6 +49,8 @@ function my_plugin_activation(){
 
 register_activation_hook(__FILE__,"my_plugin_activation");
 
+
+
 function my_plugin_deactivation(){
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
@@ -59,7 +71,7 @@ function wc_location_scripts(){
     $ver_style = filemtime(plugin_dir_path(__FILE__).'js/style.css');
     $is_login = is_user_logged_in() ? 1 : 0;
 
-    wp_enqueue_style('my-custom-style', $path_style, '', $ver_style);
+    // wp_enqueue_style('my-custom-style','js/style.css');
 
     wp_enqueue_script('my-custom-js', $path_js, $dep, $ver, true);
     wp_add_inline_script('my-custom-js', 'var ajaxUrl = "'.admin_url('admin-ajax.php').'";', 'before');
@@ -69,7 +81,10 @@ add_action('wp_enqueue_scripts', 'wc_location_scripts');
 add_action('admin_enqueue_scripts', 'wc_location_scripts');
 
 function wc_service_page(){
+    echo "<div class='wrap'>";
+    // include('inc/wp-list-table.php');
     include("admin/all-service-point.php");
+    echo "</div>";
 }
 
 function wc_add_service(){
